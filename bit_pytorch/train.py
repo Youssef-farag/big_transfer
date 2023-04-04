@@ -20,6 +20,7 @@ from os.path import join as pjoin  # pylint: disable=g-importing-member
 import time
 
 import numpy as np
+import tqdm
 import torch
 import torchvision as tv
 
@@ -112,13 +113,14 @@ def run_eval(model, data_loader, device, chrono, logger, step):
   # switch to evaluate mode
   model.eval()
 
-  logger.info("Running validation...")
+  logger.info(f"Running validation on {len(data_loader)} batches...")
   logger.flush()
 
   # all_c, all_top1, all_top5 = [], [], []
   all_c, all_top1 = [], []
   end = time.time()
-  for b, (x, y) in enumerate(data_loader):
+
+  for b, (x, y) in tqdm.tqdm(enumerate(data_loader)):
     with torch.no_grad():
       x = x.to(device, non_blocking=True)
       y = y.to(device, non_blocking=True)
