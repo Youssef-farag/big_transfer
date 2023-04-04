@@ -134,7 +134,7 @@ def run_eval(model, data_loader, device, chrono, logger, step):
         # all_c.extend(c.cpu())  # Also ensures a sync point.
         # all_top1.extend(top1.cpu())
         # all_top5.extend(top5.cpu())
-        top1 = topk(logits, y, ks=(1, ))
+        top1 = topk(logits, y, ks=(1, ))[0]
         all_c.extend(c.cpu())  # Also ensures a sync point.
         all_top1.extend(top1.cpu())
 
