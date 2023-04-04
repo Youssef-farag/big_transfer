@@ -71,12 +71,13 @@ def mktrainval(args, logger):
   elif args.dataset == "imagenet2012":
     train_set = tv.datasets.ImageFolder(pjoin(args.datadir, "train"), train_tx)
     valid_set = tv.datasets.ImageFolder(pjoin(args.datadir, "val"), val_tx)
-  else:
+  elif args.dataset == "cerrion":
     train_set = tv.datasets.ImageFolder(pjoin(args.datadir, "TRAIN"), train_tx)
     valid_set = tv.datasets.ImageFolder(pjoin(args.datadir, "VAL"), val_tx)
-    # raise ValueError(f"Sorry, we have not spent time implementing the "
-    #                  f"{args.dataset} dataset in the PyTorch codebase. "
-    #                  f"In principle, it should be easy to add :)")
+  else:
+    raise ValueError(f"Sorry, we have not spent time implementing the "
+                     f"{args.dataset} dataset in the PyTorch codebase. "
+                     f"In principle, it should be easy to add :)")
 
   if args.examples_per_class is not None:
     logger.info(f"Looking for {args.examples_per_class} images per class...")
