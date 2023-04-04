@@ -23,6 +23,7 @@ import numpy as np
 import tqdm
 import torch
 import torchvision as tv
+from sklearn.metrics import f1_score
 
 import bit_pytorch.fewshot as fs
 import bit_pytorch.lbtoolbox as lb
@@ -116,9 +117,10 @@ def run_eval(model, data_loader, device, chrono, logger, step):
   logger.info(f"Running validation on {len(data_loader)} batches...")
   logger.flush()
 
-  # all_c, all_top1, all_top5 = [], [], []
   all_c, all_top1 = [], []
   end = time.time()
+
+  preds, labels = [], []
 
   for b, (x, y) in tqdm.tqdm(enumerate(data_loader)):
     with torch.no_grad():
@@ -132,20 +134,20 @@ def run_eval(model, data_loader, device, chrono, logger, step):
       with chrono.measure("eval fprop"):
         logits = model(x)
         c = torch.nn.CrossEntropyLoss(reduction='none')(logits, y)
-        # top1, top5 = topk(logits, y, ks=(1, 5))
-        # all_c.extend(c.cpu())  # Also ensures a sync point.
-        # all_top1.extend(top1.cpu())
-        # all_top5.extend(top5.cpu())
         top1 = topk(logits, y, ks=(1, ))[0]
         all_c.extend(c.cpu())  # Also ensures a sync point.
         all_top1.extend(top1.cpu())
+
+        preds.append(torch.argmax(logits, dim=1).numpy())
+        labels.append(y.numpy())
 
     # measure elapsed time
     end = time.time()
 
   model.train()
   logger.info(f"Validation@{step} loss {np.mean(all_c):.5f}, "
-              f"top1 {np.mean(all_top1):.2%}, ")
+              f"top1 {np.mean(all_top1):.2%}, "
+              f"F1 score {f1_score(labels, preds, average='weighted')}")
   logger.flush()
   return all_c, all_top1
 
