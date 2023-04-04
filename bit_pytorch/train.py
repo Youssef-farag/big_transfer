@@ -138,8 +138,8 @@ def run_eval(model, data_loader, device, chrono, logger, step):
         all_c.extend(c.cpu())  # Also ensures a sync point.
         all_top1.extend(top1.cpu())
 
-        preds.append(torch.argmax(logits, dim=1).cpu().numpy())
-        labels.append(y.cpu().numpy())
+        preds.extend(list(torch.argmax(logits, dim=1).cpu().numpy()))
+        labels.extend(list(y.cpu().numpy()))
 
     # measure elapsed time
     end = time.time()
