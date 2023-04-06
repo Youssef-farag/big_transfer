@@ -56,12 +56,12 @@ def mktrainval(args, logger):
       tv.transforms.RandomCrop((crop, crop)),
       tv.transforms.RandomHorizontalFlip(),
       tv.transforms.ToTensor(),
-      tv.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+      tv.transforms.Normalize((125.307, 122.961, 113.8575), (51.5865, 50.847, 51.255)),
   ])
   val_tx = tv.transforms.Compose([
       tv.transforms.Resize((crop, crop)),
       tv.transforms.ToTensor(),
-      tv.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+      tv.transforms.Normalize((125.307, 122.961, 113.8575), (51.5865, 50.847, 51.255)),
   ])
 
   if args.dataset == "cifar10":
@@ -147,7 +147,7 @@ def run_eval(model, data_loader, device, chrono, logger, step):
   model.train()
   logger.info(f"Validation@{step} loss {np.mean(all_c):.5f}, "
               f"top1 {np.mean(all_top1):.2%}, "
-              f"F1 score {f1_score(labels, preds, average='weighted')}")
+              f"F1 score {f1_score(labels, preds, average='macro')}")
   logger.flush()
   return all_c, all_top1
 
