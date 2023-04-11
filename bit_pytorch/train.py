@@ -35,8 +35,7 @@ import bit_hyperrule
 class Rgb2bgr(object):
 
     def __call__(self, sample):
-        permute = [2, 1, 0]
-        return sample[:, permute]
+        return sample[[2,1,0],...]
 
 def topk(output, target, ks=(1,)):
     """Returns one boolean vector for each k, whether the target is within the output's top-k."""
