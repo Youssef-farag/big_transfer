@@ -18,6 +18,7 @@
 # coding: utf-8
 from os.path import join as pjoin  # pylint: disable=g-importing-member
 import time
+import logging
 
 import numpy as np
 import tqdm
@@ -32,10 +33,15 @@ import bit_pytorch.models as models
 import bit_common
 import bit_hyperrule
 
+logging.getLogger('PIL').setLevel(logging.WARNING)
+
 class Rgb2bgr(object):
 
     def __call__(self, sample):
-        return sample[[2,1,0],...]
+        print(sample.shape)
+        sample = sample[[2,1,0],...]
+        print(sample.shape)
+        return sample
 
 def topk(output, target, ks=(1,)):
     """Returns one boolean vector for each k, whether the target is within the output's top-k."""
