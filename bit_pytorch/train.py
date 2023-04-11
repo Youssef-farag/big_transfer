@@ -38,10 +38,7 @@ logging.getLogger('PIL').setLevel(logging.WARNING)
 class Rgb2bgr(object):
 
     def __call__(self, sample):
-        print(sample.shape)
-        sample = sample[[2,1,0],...]
-        print(sample.shape)
-        return sample
+        return sample[[2,1,0],...]
 
 def topk(output, target, ks=(1,)):
     """Returns one boolean vector for each k, whether the target is within the output's top-k."""
