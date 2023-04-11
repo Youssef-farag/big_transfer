@@ -57,18 +57,18 @@ def mktrainval(args, logger):
     """Returns train and validation datasets."""
     precrop, crop = bit_hyperrule.get_resolution_from_dataset(args.dataset)
     train_tx = tv.transforms.Compose([
-        Rgb2bgr(),
         tv.transforms.Resize((precrop, precrop)),
         tv.transforms.RandomCrop((crop, crop)),
         tv.transforms.RandomHorizontalFlip(),
         tv.transforms.ToTensor(),
         tv.transforms.Normalize((125.307, 122.961, 113.8575), (51.5865, 50.847, 51.255)),
+        Rgb2bgr()
     ])
     val_tx = tv.transforms.Compose([
-        Rgb2bgr(),
         tv.transforms.Resize((crop, crop)),
         tv.transforms.ToTensor(),
         tv.transforms.Normalize((125.307, 122.961, 113.8575), (51.5865, 50.847, 51.255)),
+        Rgb2bgr()
     ])
 
     if args.dataset == "cifar10":
